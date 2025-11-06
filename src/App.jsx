@@ -6,6 +6,7 @@ import Loading from './components/Loading';
 
 // Pages
 import Login from './pages/Login';
+import RegisterAdmin from './pages/RegisterAdmin';
 import Dashboard from './pages/Dashboard';
 import Tontines from './pages/Tontines';
 import Transactions from './pages/Transactions';
@@ -20,6 +21,10 @@ const AppRoutes = () => {
 
   return (
     <Routes>
+      <Route
+        path="/create-admin"
+        element={<RegisterAdmin />}
+      />
       <Route
         path="/login"
         element={isAuthenticated ? <Navigate to="/dashboard" replace /> : <Login />}

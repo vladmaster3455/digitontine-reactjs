@@ -1,5 +1,5 @@
 import React, { useState } from 'react';
-import { useNavigate } from 'react-router-dom';
+import { useNavigate, Link } from 'react-router-dom';
 import { useAuth } from '../context/AuthContext';
 import Input from '../components/Input';
 import Button from '../components/Button';
@@ -114,10 +114,16 @@ const Login = () => {
               {loading ? 'Connexion...' : 'Se connecter'}
             </Button>
 
-            <div className="mt-4 text-center">
-              <a href="/forgot-password" className="text-sm text-primary-600 hover:underline">
+            <div className="mt-4 text-center space-y-2">
+              <Link to="/forgot-password" className="text-sm text-primary-600 hover:underline block">
                 Mot de passe oublié ?
-              </a>
+              </Link>
+              <p className="text-sm text-gray-600">
+                Pas encore de compte admin ?{' '}
+                <Link to="/create-admin" className="text-primary-600 hover:underline font-medium">
+                  Créer un administrateur
+                </Link>
+              </p>
             </div>
           </form>
         ) : (
