@@ -6,6 +6,14 @@ const API_BASE_URL = import.meta.env.VITE_API_BASE_URL || 'http://localhost:5000
 const API_PREFIX = '/api/proxy';
 const API_TIMEOUT = 120000;
 
+// Log pour debug (uniquement en développement)
+if (import.meta.env.DEV) {
+  console.log('🔧 API Configuration:');
+  console.log('  - VITE_API_BASE_URL:', import.meta.env.VITE_API_BASE_URL);
+  console.log('  - API_BASE_URL:', API_BASE_URL);
+  console.log('  - CREATE_ADMIN_PUBLIC:', `${API_BASE_URL}/create-admin-public`);
+}
+
 const API_CONFIG = {
   BASE_URL: API_BASE_URL,
   API_PREFIX: API_PREFIX,

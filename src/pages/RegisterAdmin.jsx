@@ -103,13 +103,18 @@ const RegisterAdmin = () => {
         adresse: formData.adresse || undefined,
       };
 
+      const apiUrl = API_CONFIG.ENDPOINTS.AUTH.CREATE_ADMIN_PUBLIC;
+      console.log('URL API:', apiUrl);
+      console.log('Payload:', { ...payload, motDePasse: '***' });
+
       const response = await axios.post(
-        API_CONFIG.ENDPOINTS.AUTH.CREATE_ADMIN_PUBLIC,
+        apiUrl,
         payload,
         {
           headers: {
             'Content-Type': 'application/json',
           },
+          timeout: API_CONFIG.TIMEOUT,
         }
       );
 

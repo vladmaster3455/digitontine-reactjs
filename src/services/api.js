@@ -28,6 +28,17 @@ api.interceptors.response.use(
   async (error) => {
     const originalRequest = error.config;
 
+    // Log des erreurs en développement
+    if (import.meta.env.DEV) {
+      console.error('❌ API Error:', {
+        url: error.config?.url,
+        method: error.config?.method,
+        status: error.response?.status,
+        message: error.message,
+        response: error.response?.data,
+      });
+    }
+
     // Si erreur 401 et pas déjà retenté
     if (error.response?.status === 401 && !originalRequest._retry) {
       originalRequest._retry = true;
