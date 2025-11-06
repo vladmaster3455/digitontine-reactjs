@@ -32,18 +32,36 @@ const RegisterAdmin = () => {
   };
 
   const validateForm = () => {
-    if (!formData.prenom || !formData.nom) {
-      setError('Le prénom et le nom sont requis');
+    // Validation prénom
+    if (!formData.prenom || formData.prenom.trim() === '') {
+      setError('Le prénom est requis');
       return false;
     }
-    if (!formData.email) {
+    
+    // Validation nom
+    if (!formData.nom || formData.nom.trim() === '') {
+      setError('Le nom est requis');
+      return false;
+    }
+    
+    // Validation email
+    if (!formData.email || formData.email.trim() === '') {
       setError('L\'email est requis');
       return false;
     }
-    if (!formData.numeroTelephone) {
+    const emailRegex = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
+    if (!emailRegex.test(formData.email)) {
+      setError('L\'email n\'est pas valide');
+      return false;
+    }
+    
+    // Validation téléphone
+    if (!formData.numeroTelephone || formData.numeroTelephone.trim() === '') {
       setError('Le numéro de téléphone est requis');
       return false;
     }
+    
+    // Validation mot de passe
     if (!formData.motDePasse) {
       setError('Le mot de passe est requis');
       return false;
@@ -52,10 +70,13 @@ const RegisterAdmin = () => {
       setError('Le mot de passe doit contenir au moins 8 caractères');
       return false;
     }
+    
+    // Validation confirmation mot de passe
     if (formData.motDePasse !== formData.confirmerMotDePasse) {
       setError('Les mots de passe ne correspondent pas');
       return false;
     }
+    
     return true;
   };
 
@@ -99,10 +120,36 @@ const RegisterAdmin = () => {
         }, 2000);
       }
     } catch (err) {
-      setError(
-        err.response?.data?.message ||
-        'Erreur lors de la création de l\'administrateur. Veuillez réessayer.'
-      );
+      console.error('Erreur création admin:', err);
+      
+      // Gestion détaillée des erreurs
+      let errorMessage = 'Erreur lors de la création de l\'administrateur. Veuillez réessayer.';
+      
+      if (err.response) {
+        // Erreur avec réponse du serveur
+        const status = err.response.status;
+        const data = err.response.data;
+        
+        if (data?.message) {
+          errorMessage = data.message;
+        } else if (data?.error) {
+          errorMessage = data.error;
+        } else if (status === 400) {
+          errorMessage = 'Données invalides. Vérifiez tous les champs requis.';
+        } else if (status === 409) {
+          errorMessage = 'Cet email ou ce numéro de téléphone est déjà utilisé.';
+        } else if (status === 500) {
+          errorMessage = 'Erreur serveur. Veuillez réessayer plus tard.';
+        }
+      } else if (err.request) {
+        // Pas de réponse du serveur
+        errorMessage = 'Impossible de contacter le serveur. Vérifiez votre connexion internet.';
+      } else {
+        // Erreur de configuration
+        errorMessage = 'Erreur de configuration. Veuillez contacter le support.';
+      }
+      
+      setError(errorMessage);
     } finally {
       setLoading(false);
     }
@@ -213,6 +260,7 @@ const RegisterAdmin = () => {
               onChange={handleChange}
               placeholder="Minimum 8 caractères"
               required
+              showPasswordToggle={true}
             />
 
             <Input
@@ -223,6 +271,7 @@ const RegisterAdmin = () => {
               onChange={handleChange}
               placeholder="Confirmez le mot de passe"
               required
+              showPasswordToggle={true}
             />
           </div>
 

@@ -102,6 +102,7 @@ const Login = () => {
               onChange={handleChange}
               placeholder="Votre mot de passe"
               required
+              showPasswordToggle={true}
             />
 
             <Button
